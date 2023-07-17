@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">testsdk</string>
+    <string name="invoice_status_new">Счёт на оплату</string>
+    <string name="invoice_status_process">Счёт в обработке</string>
+    <string name="invoice_status_ok">Счёт успешно оплачен</string>
+    <string name="invoice_status_failed">Ошибка оплаты счёта</string>
+    <string name="invoice_status_incomplete">Срок ожидания оплаты истек</string>
+    <string name="invoice_status_unknown">Неизвестный статус счёта</string>
+
+    <string name="incorrect_qr">Некорректный QR код</string>
+    <string name="cards_not_found">Нет доступных карт для оплаты</string>
+    <string name="go_to_main">На главную</string>
+    <string name="payment">Оплатить</string>
+    <string name="it_is_clear">Понятно</string>
+    <string name="close_page">Закрыть страницу</string>
+    <string name="empty_cards">Список карт пуст</string>
+
+
+    <string name="error_title">Ошибка</string>
+    <string name="load_cards_error">Не удалось загрузить список карт</string>
+    <string name="remove_cards_error">Не удалось удалить карту</string>
+    <string name="camera_error">Нет доступа к камере</string>
+    <string name="payment_status_error">Не удалось получить статус по счёту</string>
+    <string name="add_card_error">Не удалось загрузить страницу</string>
+    <string name="payment_error">Во время оплаты что то пошло не так</string>
+</resources>

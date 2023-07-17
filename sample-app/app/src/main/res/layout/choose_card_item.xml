@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardItem"
+    android:paddingHorizontal="20dp"
+    android:textSize="14dp"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:textColor="@color/black"
+    android:layout_height="60dp"
+    tools:text="•••• 4400"/>

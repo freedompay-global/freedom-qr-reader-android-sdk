@@ -49,7 +49,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation "implementation 'com.github.freedompay-global:freedom-qr-reader-android-sdk:${version}"
+    implementation "com.github.freedompay-global:freedom-qr-reader-android-sdk:${version}"
 }
 ```
 `version` - текущая версия SDK.
