@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import money.freedompay.qrreader.api.FreedomQRClient
+import money.freedompay.qrreader.api.models.Url
 import money.freedompay.qrreader.api.models.responses.PaymentStatusResponse
 import money.freedompay.qrreader.api.models.responses.TokenizedCardDetailResponse
 import money.freedompay.qrreader.api.ui.AddCardView
@@ -50,6 +51,25 @@ class FreedomSdkWrapper {
             suspendCoroutine { continuation ->
                 freedomPaySdk.getPaymentStatus(
                     customerId,
+                    {
+                        continuation.resume(RequestResult.Success(it))
+                    },
+                    {
+                        continuation.resume(RequestResult.Error(it))
+                    },
+                    {
+                        continuation.resume(RequestResult.FatalError(it))
+                    }
+                )
+            }
+        }
+    }
+
+    suspend fun getPaymentStatus(url: Url): RequestResult<PaymentStatusResponse> {
+        return withContext(Dispatchers.IO) {
+            suspendCoroutine { continuation ->
+                freedomPaySdk.getPaymentStatus(
+                    url.customerId,
                     {
                         continuation.resume(RequestResult.Success(it))
                     },

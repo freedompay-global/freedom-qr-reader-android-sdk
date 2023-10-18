@@ -10,15 +10,18 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import money.freedompay.qrreader.api.models.Url
 import money.freedompay.qrreader.api.models.responses.PaymentStatusResponse
 import money.freedompay.qrreader.api.models.responses.TokenizedCardDetailResponse
 import money.freedompay.testsdk.App
 import money.freedompay.testsdk.R
 import money.freedompay.testsdk.databinding.PaymentFragmentBinding
 import money.freedompay.testsdk.extencions.*
+import money.freedompay.testsdk.model.EnumLink
 import money.freedompay.testsdk.model.InvoiceStatus
 import money.freedompay.testsdk.model.RequestResult
 import money.freedompay.testsdk.ui.adapters.ChooseCardAdapter
+import money.freedompay.testsdk.utils.QRValidator
 import money.freedompay.testsdk.wrapper.FreedomSdkWrapper
 
 private const val EXTRA_CUSTOMER_ID = "EXTRA_CUSTOMER_ID"
@@ -75,8 +78,41 @@ class PaymentFragment :
 
     private fun loadData() {
         showShimmer()
+        when (QRValidator.getUrlType(customerId)) {
+            EnumLink.QR -> getPaymentStatus(customerId)
+            EnumLink.DEEP_LINK -> {
+                val url = Url.initialize(customerId)
+                if (url != null) {
+                    customerId = url.customerId
+                    getPaymentStatusByUrl(url)
+                }
+            }
+        }
+    }
+
+    private fun getPaymentStatus(customer: String) {
         lifecycleScope.launch {
-            when (val statusData = sdk.getPaymentStatus(customerId)) {
+            when (val statusData = sdk.getPaymentStatus(customer)) {
+                is RequestResult.Success -> {
+                    when (InvoiceStatus.getTextBy(statusData.data.invoiceStatus)) {
+                        InvoiceStatus.NEW -> processNewInvoice(statusData.data)
+                        InvoiceStatus.UNKNOWN -> showErrorAlert(R.string.payment_status_error)
+                        else -> processOtherInvoice(statusData.data)
+                    }
+                }
+                is RequestResult.Error -> {
+                    showErrorAlert(R.string.payment_status_error)
+                }
+                is RequestResult.FatalError -> {
+                    showErrorAlert(R.string.payment_status_error)
+                }
+            }
+        }
+    }
+
+    private fun getPaymentStatusByUrl(url: Url) {
+        lifecycleScope.launch {
+            when (val statusData = sdk.getPaymentStatus(url)) {
                 is RequestResult.Success -> {
                     when (InvoiceStatus.getTextBy(statusData.data.invoiceStatus)) {
                         InvoiceStatus.NEW -> processNewInvoice(statusData.data)
